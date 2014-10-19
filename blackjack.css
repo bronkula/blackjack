@@ -6,7 +6,7 @@ body {
     background-color:#eee;
 }
 .container {
-    width:800px;
+    /*width:800px;*/
     margin-left:auto;
     margin-right:auto;
 }
@@ -138,4 +138,19 @@ body {
 .card-stack>.card:nth-child(6) {
     bottom:10px;
     left:10px;
+}
+
+
+.title-dealer,.title-player {
+    position:absolute;
+    left:30px;
+    font-size:1.3em;
+    line-height:1em;
+    font-weight:bold;
+}
+.title-dealer {
+    top:97px;
+}
+.title-player {
+    top:197px;
 }
