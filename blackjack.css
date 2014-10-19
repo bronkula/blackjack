@@ -1,0 +1,141 @@
+
+* {
+    box-sizing:border-box;
+}
+body {
+    background-color:#eee;
+}
+.container {
+    width:800px;
+    margin-left:auto;
+    margin-right:auto;
+}
+.view-gameboard,.view-controls {
+    float:left;
+    position:relative;
+}
+.view-gameboard {
+    width:70%;
+
+}
+.view-controls {
+    width:30%;
+}
+.view-cards {
+    position:relative;
+    font-size:30px;
+}
+.view-titles,.view-cards {
+    position:absolute;
+    left:0;
+    top:0;
+}
+
+.row {
+    margin-bottom:1em;
+}
+.row:after {
+    clear:both;
+    display:table;
+    content:"";
+}
+.card-row {
+    font-size:30px;
+    height:2.3333em;
+    line-height:1em;
+}
+.card-row-large {
+    font-size:60px;
+    line-height:1em;
+}
+.card, .card-stack {
+    height:2.3333em;
+}
+.card {
+    font-family:sans-serif;
+    display:inline-block;
+    border:1px solid black;
+    background-color:white;
+    font-size:1em;
+    margin:1px;
+    padding:.1666em;
+    border-radius:.1666em;
+    width:1.6666em;
+    line-height:1em;
+    text-align:center;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor:default;
+    vertical-align: middle;
+    position:absolute;
+    -webkit-transition:top .3s, left .3s;
+    -moz-transition:top .3s, left .3s;
+    transition:top .3s, left .3s;
+}
+.card-back,.facedown {
+    background-color: #4C6694;
+    background-image:
+    repeating-linear-gradient(120deg, rgba(255,255,255,.1), rgba(255,255,255,.1) 2px, transparent 2px, transparent 48%),
+    repeating-linear-gradient(60deg, rgba(255,255,255,.1), rgba(255,255,255,.1) 2px, transparent 2px, transparent 48%),
+    linear-gradient(60deg, rgba(0,0,0,.1) 25%, transparent 25%, transparent 75%, rgba(0,0,0,.1) 75%, rgba(0,0,0,.1)),
+    linear-gradient(120deg, rgba(0,0,0,.1) 25%, transparent 25%, transparent 75%, rgba(0,0,0,.1) 75%, rgba(0,0,0,.1));
+    background-size: .4em .8em;
+}
+.ondeck {
+    display:none;
+}
+
+.card-icon-top, .card-icon-bottom {
+    position:absolute;
+    /*font-size:.4em;*/
+    line-height:1em;
+}
+.card-icon-top {
+    font-size:.8rem;
+    top:.2rem;
+    left:.06rem;
+}
+.card-icon-bottom {
+    font-size:1.5rem;
+    bottom:.1rem;
+    right:.1rem;
+    /*-ms-transform: rotate(180deg);*/ /* IE 9 */
+    /*-webkit-transform: rotate(180deg);*/ /* Chrome, Safari, Opera */
+    /*transform: rotate(180deg);*/
+}
+
+.card-stack {
+    position:relative;
+    display:inline-block;
+}
+.card-stack>.card {
+    position:absolute;
+}
+.card-stack>.card:nth-child(1) {
+    bottom:0;
+    left:0;
+}
+.card-stack>.card:nth-child(2) {
+    bottom:2px;
+    left:2px;
+}
+.card-stack>.card:nth-child(3) {
+    bottom:4px;
+    left:4px;
+}
+.card-stack>.card:nth-child(4) {
+    bottom:6px;
+    left:6px;
+}
+.card-stack>.card:nth-child(5) {
+    bottom:8px;
+    left:8px;
+}
+.card-stack>.card:nth-child(6) {
+    bottom:10px;
+    left:10px;
+}
