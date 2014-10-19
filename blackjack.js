@@ -8,7 +8,7 @@
 // DATABASE
     BJ.suits = [
         { name:"Spades", value:0, color:"black", icon:"&spades;" },
-        { name:"Hearts", value:1, color:"red", icon:"&spades;" },
+        { name:"Hearts", value:1, color:"red", icon:"&hearts;" },
         { name:"Clubs", value:2, color:"black", icon:"&clubs;" },
         { name:"Diamonds", value:3, color:"red", icon:"&diams;" }
         ];
@@ -32,7 +32,7 @@
     BJ.cardWidth = 40;
     BJ.cardHeight = 70;
 
-    BJ.rowGap = 10;
+    BJ.rowGap = 30;
     BJ.cardGap = 5;
 
     BJ.deckTop = 20;
@@ -53,24 +53,22 @@
     BJ.dealer = function(){
         return BJ.stacks[1];
     }
-    BJ.discard = function(){
+    BJ.player = function(){
         return BJ.stacks[2];
     }
-    BJ.player = function(){
+    BJ.discard = function(){
         return BJ.stacks[3];
     }
 
 
 
-$(".card").on("click",function(){
-            console.log("hello");
-        });
 
 // INITIALIZER
     BJ.init = function(){
         BJ.resetStacks();
 
         BJ.makeGameDB();
+        BJ.drawGameDB();
 
         BJ.cardTemplate = _.template($("#Card").html());
 
@@ -120,6 +118,39 @@ $(".card").on("click",function(){
                     .setHandPos();
             }
         });
+        $(".js-dealinitial").on("click",function(){
+            if(BJ.deck().cards.length) {
+                BJ.dealTo("player")
+                    .removeFaceDown()
+                    .setHandPos();
+                BJ.dealTo("dealer")
+                    // .removeFaceDown()
+                    .setHandPos();
+                BJ.dealTo("player")
+                    .removeFaceDown()
+                    .setHandPos();
+                BJ.dealTo("dealer")
+                    .removeFaceDown()
+                    .setHandPos();
+            }
+            BJ.checkHand(BJ.player());
+            BJ.checkHand(BJ.dealer());
+            BJ.checkInitial();
+        });
+        $(".js-hitplayer").on("click",function(){
+            if(BJ.deck().cards.length) {
+                BJ.dealTo("player")
+                    .removeFaceDown()
+                    .setHandPos();
+                BJ.checkHand(BJ.player());
+            }
+            BJ.checkScenario();
+        });
+        $(".js-stayplayer").on("click",function(){
+            if(BJ.deck().cards.length) {
+                BJ.playDealer();
+            }
+        });
 
 
 
@@ -136,9 +167,10 @@ $(".card").on("click",function(){
         BJ.stacks = [
             new BJ.Stack(0,"Deck",[],BJ.deckLeft,BJ.deckTop),
             new BJ.Stack(1,"Dealer",[],BJ.dealerLeft,BJ.dealerTop),
-            new BJ.Stack(2,"Discard",[],BJ.discardLeft,BJ.discardTop),
-            new BJ.Stack(3,"Player",[],BJ.playerLeft,BJ.playerTop)
+            new BJ.Stack(2,"Player",[],BJ.playerLeft,BJ.playerTop),
+            new BJ.Stack(3,"Discard",[],BJ.discardLeft,BJ.discardTop)
         ];
+        BJ.writeMsg("");
     };
     BJ.startGame = function(){
         BJ.deck().freshDeck().shuffle();
@@ -151,7 +183,12 @@ $(".card").on("click",function(){
     BJ.makeGameDB = function(){
         BJ.money = 100;
         BJ.bet = 10;
-
+        BJ.dealer_points;
+        BJ.player_points;
+    }
+    BJ.drawGameDB = function(){
+        $(".db-money .db-value").html(BJ.money);
+        $(".db-bet .db-value").html(BJ.bet);
     }
 
     BJ.drawDeckInStats = function(){
@@ -177,9 +214,6 @@ $(".card").on("click",function(){
         BJ.player().discardCards();
         // $(".view-cards").empty();
     };
-    BJ.drawTable = function(){
-
-    };
     BJ.reDrawDeck = function(){
 
         for(var i=0,l=BJ.deck().cards.length; i<l; i++) {
@@ -187,6 +221,160 @@ $(".card").on("click",function(){
             BJ.deck().cards[i].setDeckPos(i);
         }
     }
+
+
+
+
+
+// GAME FUNCTIONS
+    BJ.checkHand = function(hand){
+        for(var i=0,l=hand.cards.length; i<l; i++) {
+            BJ.checkCard(hand,hand.cards[i]);
+        }
+    };
+    BJ.checkCard = function(hand,card){
+        // console.log(hand.points)
+        // card = hand.cards[i];
+        // calculate aces
+        if(card.face.value==0) {
+            if(hand.points+11<=21) {
+                hand.points += 11;
+                hand.soft = true;
+            } else if(hand.soft && hand.points+1<21) {
+                hand.points += 1;
+                hand.soft = true;
+            } else {
+                hand.points++;
+                hand.soft = false;
+            }
+        } 
+        // calculate face cards
+        else if(card.face.value+1 > 9) {
+            hand.points += 10;
+            if(hand.soft && hand.points>21) {
+                hand.points -= 10;
+                hand.soft = false;
+            }
+        }
+        // calculate number cards
+        else {
+            hand.points += card.face.value+1;
+            if(hand.soft && hand.points>21) {
+                hand.points -= card.face.value+1;
+                hand.soft = false;
+            }
+        }
+        // console.log(hand.points)
+        
+    };
+    BJ.checkInitial = function(){
+        var d = BJ.dealer(), p = BJ.player();
+        // console.log(d.points,p.points)
+        if(d.points==21)
+        {
+            d.cards[0].removeFaceDown();
+            if(p.points==21)
+            {
+                BJ.writeMsg("It's a Draw!");
+            }
+            else
+            {
+                BJ.writeMsg("Dealer Blackjack! You Lose!");
+            }
+        }
+        else if(p.points==21)
+        {
+            BJ.writeMsg("Blackjack! You Win!");
+        }
+    }
+    BJ.checkScenario = function(){
+        var d = BJ.dealer(), p = BJ.player();
+        console.log(d.points,p.points)
+        result = false;
+        if(d.points==21)
+        {
+            if(p.points==21)
+            {
+                BJ.writeMsg("It's a Draw!");
+            }
+            else
+            {
+                BJ.writeMsg("Dealer Blackjack! You Lose!");
+            }
+        }
+        else if(d.points>21)
+        {
+            BJ.writeMsg("Dealer Busts! You Win!");
+        }
+        else if(p.points>21)
+        {
+            BJ.writeMsg("Player Busts! You Lose");
+        }
+        else if(p.points==21)
+        {
+            BJ.writeMsg("Blackjack! You Win!");
+        }
+        else if(d.points>16)
+        {
+            if(d.points>p.points)
+            {
+                BJ.writeMsg("Dealer Wins! You Lose!");
+            }
+            else if(d.points==p.points)
+            {
+                BJ.writeMsg("It's a Draw!");
+            }
+            else
+            {
+                BJ.writeMsg("You Win!");
+            }
+        }
+        else
+        {
+            BJ.writeMsg("No Change");
+            result = true;
+        }
+        return result;
+        // if(current_points>21) {
+        //     BJ.writeMsg(hand.isDealer?"Dealer BUSTS":"You BUST!");
+        //     return false;
+        // } else if(current_points==21) {
+        //     BJ.writeMsg(hand.isDealer?"21 YOU LOSE":"21 YOU WIN!");
+        //     return false;
+        // } else if(hand.isDealer && current_points>=16) {
+        //     if(current_points>BJ.player_points) {
+        //         BJ.writeMsg("Dealer Wins!");
+        //     } else if(current_points==BJ.player_points) {
+        //         BJ.writeMsg("It's a Draw!");
+        //     } else {
+        //         BJ.writeMsg("Dealer stays, You Win!");
+        //     }
+
+        //     return false;
+        // } else if(hand.cards.length>2) {
+        //     BJ.writeMsg(hand.isDealer?"Dealer Hits":"You Hit");
+        //     return true;
+        // } else {
+        //     BJ.writeMsg("");
+        //     return true;
+        // }
+    };
+
+    BJ.playDealer = function(){
+        BJ.dealer().cards[0].removeFaceDown();
+        while(BJ.checkScenario()) {
+            BJ.dealTo("dealer")
+                .removeFaceDown()
+                .setHandPos();
+            BJ.checkCard(BJ.dealer(),BJ.dealer().lastCard());
+            // BJ.checkScenario();
+        }
+        
+    };
+
+    BJ.writeMsg = function(msg) {
+        $(".db-message").html(msg);
+    };
 
 
 
@@ -200,6 +388,10 @@ $(".card").on("click",function(){
         }
         this.id = id;
         this.name = name;
+        if(this.id==1) this.isDealer = true;
+        else this.isDealer = false;
+        this.points = 0;
+        this.soft = false;
         this.pos = {
             x:x,
             y:y
@@ -232,14 +424,6 @@ $(".card").on("click",function(){
         this.cards = _.sortBy(this.cards,function(card){ return card[ord].value; });
         return this;
     };
-    BJ.Stack.prototype.orderByFace = function(){
-        this.orderBy("face");
-        return this;
-    };
-    BJ.Stack.prototype.orderBySuit = function(){
-        this.orderBy("suit");
-        return this;
-    };
     BJ.Stack.prototype.reOrder = function(){
         this.orderBy("face").orderBy("suit");
         return this;
@@ -260,6 +444,9 @@ $(".card").on("click",function(){
         }
         return this;
     }
+    BJ.Stack.prototype.lastCard = function(){
+        return this.cards[this.cards.length-1];
+    }
 
 
 
@@ -267,7 +454,7 @@ $(".card").on("click",function(){
 
     // Card Constructor
     BJ.Card = function(suit,face){
-        this.id = face + (suit * BJ.faces.length);
+        this.id = +face + (suit * 13);
         this.suit = BJ.suits[suit];
         this.face = BJ.faces[face];
         this.view = $(BJ.cardTemplate({color:this.suit.color}));
@@ -306,12 +493,13 @@ $(".card").on("click",function(){
             this.view.css({"z-index":deckposition});
         }
     };
-    BJ.Card.prototype.setHandPos = function(deckposition) {
+    BJ.Card.prototype.setHandPos = function() {
         var stack = BJ.stacks[this.stackId];
         this.setPos(
-            stack.pos.x + ((stack.cards.length-1) * ((BJ.cardWidth/1.8) + BJ.cardGap)),
+            stack.pos.x + ((stack.cards.length-1) * ((BJ.cardWidth) + BJ.cardGap*2.5)),
             stack.pos.y
             );
+        this.view.css({"z-index":(60 * (this.stackId)) + stack.cards.length});
     };
     BJ.Card.prototype.setDiscardPos = function() {
         var stack = BJ.discard();
