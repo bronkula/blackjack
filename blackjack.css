@@ -54,7 +54,7 @@ body {
 .card {
     font-family:sans-serif;
     display:inline-block;
-    border:1px solid black;
+    border:.06em solid black;
     background-color:white;
     font-size:1em;
     margin:1px;
@@ -95,14 +95,14 @@ body {
     line-height:1em;
 }
 .card-icon-top {
-    font-size:.8rem;
-    top:.2rem;
-    left:.06rem;
+    font-size:.4em;
+    top:.2em;
+    left:.06em;
 }
 .card-icon-bottom {
-    font-size:1.5rem;
-    bottom:.1rem;
-    right:.1rem;
+    font-size:.8em;
+    bottom:.1em;
+    right:.1em;
     /*-ms-transform: rotate(180deg);*/ /* IE 9 */
     /*-webkit-transform: rotate(180deg);*/ /* Chrome, Safari, Opera */
     /*transform: rotate(180deg);*/
