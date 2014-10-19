@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BlackJack</title>
+    <link rel="stylesheet" href="blackjack.css">
+    <script src="../../lib/js/jquery-2.1.1.min.js"></script>
+    <script src="../../lib/js/underscore.min.js"></script>
+<style>
+</style>
+</head>
+<body>
+    <div class="container">
+        <h1>BlackJack</h1>
+        <div class="row">
+            <div class="view-gameboard">
+                &nbsp;
+                <div class="view-titles"></div>
+                <div class="view-cards"></div>
+            </div>
+            <div class="view-controls">
+                <div><button type="button" class="js-newgame">New Game</button></div>
+                <div><button type="button" class="js-gathercards">Clear Table</button></div>
+                <div><button type="button" class="js-discardhands">Discard Hands</button></div>
+                <div><button type="button" class="js-shuffledeck">Shuffle Deck</button></div>
+                <div><button type="button" class="js-dealplayer">Deal Player</button></div>
+                <div><button type="button" class="js-dealdealer">Deal Dealer</button></div>
+            </div>
+        </div>
+        <div class="view-stats">&nbsp;</div>
+    </div>
+</body>
+
+
+<script type="text/template" id="Card">
+<span class='card facedown' style='color:<%=color%>'></span>
+</script>
+
+<script src="blackjack.js"></script>
+</html>
