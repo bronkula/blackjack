@@ -6,9 +6,14 @@ body {
     background-color:#eee;
 }
 .container {
-    /*width:800px;*/
+    width:800px;
     margin-left:auto;
     margin-right:auto;
+}
+@media (max-width:800px) {
+    .container {
+        width:initial;
+    }
 }
 .view-gameboard,.view-controls {
     float:left;
@@ -93,6 +98,7 @@ body {
     position:absolute;
     /*font-size:.4em;*/
     line-height:1em;
+    display:block;
 }
 .card-icon-top {
     font-size:.4em;
@@ -147,10 +153,63 @@ body {
     font-size:1.3em;
     line-height:1em;
     font-weight:bold;
+    white-space: nowrap;
 }
 .title-dealer {
     top:97px;
 }
 .title-player {
     top:197px;
+}
+.engagement {
+    margin-top:1em;
+}
+
+.column {
+    float:left;
+    padding-left:1%;
+    padding-right:1%;
+}
+.col-3 {
+    width:25%;
+}
+.col-4 {
+    width:33.3333%;
+}
+.col-6 {
+    width:50%;
+}
+.col-8 {
+    width:66.6666%;
+}
+.col-9 {
+    width:75%;
+}
+.col-12 {
+    width:100%;
+}
+
+
+.btn-ctrl {
+    font-size:inherit;
+    float:left;
+    width:100%;
+    display:block;
+    height:1.6em;
+    padding:.20em .5em;
+    text-align:center;
+    border:.1em solid #ddd;
+    background-color:white;
+    color:#333;
+    cursor:pointer;
+    border-radius:4px;
+    margin-top:1%;
+    margin-bottom:1%;
+    outline:0;
+}
+.btn-ctrl:nth-child(even) {
+    /*margin-left:2%;*/
+}
+.btn-ctrl:hover {
+    background-color:#ffe;
 }
