@@ -3,32 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <title>BlackJack</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
     <link rel="stylesheet" href="blackjack.css">
     <script src="../../lib/js/jquery-2.1.1.min.js"></script>
     <script src="../../lib/js/underscore.min.js"></script>
 <style>
 </style>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52139-1', 'hamiltondraws.com');
+  ga('send', 'pageview');
+</script>
 </head>
 <body>
     <div class="container">
-        <h1>BlackJack</h1>
+        <h1>BlackJack v0.51</h1>
+        <button type="button" class="btn-ctrl js-newgame">New Game</button>
         <div class="row">
             <div class="view-gameboard">
                 &nbsp;
                 <div class="view-titles">
-                    <span class="title-dealer">Dealer</span>
-                    <span class="title-player">Player</span>
+                    <div class="title-dealer hidden">Dealer <span class="title-points"></span></div>
+                    <div class="title-player hidden">Player <span class="title-points"></span></div>
                 </div>
                 <div class="view-cards"></div>
             </div>
             <div class="view-controls">
-                <div><button type="button" class="js-newgame">New Game</button></div>
-                <!-- <div><button type="button" class="js-gathercards">Clear Table</button></div>
-                <div><button type="button" class="js-discardhands">Discard Hands</button></div>
-                <div><button type="button" class="js-shuffledeck">Shuffle Deck</button></div> -->
-                <div><button type="button" class="js-dealinitial">Deal</button></div>
-                <div><button type="button" class="js-hitplayer">Hit</button></div>
-                <div><button type="button" class="js-stayplayer">Stay</button></div>
+                <!-- <button type="button" class="js-gathercards">Clear Table</button>
+                <button type="button" class="js-discardhands">Discard Hands</button>
+                <button type="button" class="js-shuffledeck">Shuffle Deck</button> -->
+                <div class="">
+                    <button type="button" class="btn-ctrl js-dealinitial">Deal</button>
+                </div>
+                <div class="column col-6">
+                    <button type="button" class="btn-ctrl js-hitplayer">Hit</button>
+                </div>
+                <div class="column col-6">
+                    <button type="button" class="btn-ctrl js-stayplayer">Stay</button>
+                </div>
 
                 <div class="db-money">
                     <span>$</span>
@@ -38,7 +56,11 @@
                     <span>Bet $</span>
                     <span class="db-value"></span>
                 </div>
-                <div class="db-message"></div>
+                <div class="db-message">&nbsp;</div>
+                <div class="db-suggestion">&nbsp;</div>
+                <div class="engagement">
+                    A little game by <a href="http://www.hamiltondraws.com">Hamilton Cline</a>
+                </div>
                 <!-- <div><button type="button" class="js-dealplayer">Deal Player</button></div>
                 <div><button type="button" class="js-dealdealer">Deal Dealer</button></div> -->
             </div>
