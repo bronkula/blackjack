@@ -552,7 +552,7 @@
         this.id = +face + (suit * 13);
         this.suit = BJ.suits[suit];
         this.face = BJ.faces[face];
-        this.view = $(BJ.cardTemplate({color:this.suit.color}));
+        this.view = $(BJ.cardTemplate({color:this.suit.color,suit:this.suit.icon,face:this.face.icon}));
         this.view
             .data({"card":this})
             .appendTo(BJ.viewCards);
@@ -574,13 +574,16 @@
         }
         return this;
     };
+
+    // This function should be modified for each new game
+    // Containing the way in which each stack will orient its cards
     BJ.Card.prototype.setStackPosition = function(position) {
         // console.log(deckposition)
         var stack = BJ.stacks[this.stackId];
         position = position===undefined ? stack.cards.length-1 : position;
         // console.log(this);
         this.view.css({"z-index":(60 * (this.stackId)) + stack.cards.length});
-        if(this.stackId==0) 
+        if(stack.name=="Deck") 
         {
             this.setPos(
                 BJ.deckLeft + Math.floor(position/BJ.stackModulo)*2, 
@@ -588,14 +591,14 @@
                 );
             this.view.css({"z-index":position});
         }
-        else if(this.stackId==3)
+        else if(stack.name=="Discard")
         {
             this.setPos(
                 stack.pos.x + ((stack.cards.length-1) * ((BJ.cardWidth/10) + BJ.cardGap)),
                 stack.pos.y
                 );
         }
-        else if(this.stackId== 1 || this.stackId==2)
+        else
         {
             this.setPos(
                 stack.pos.x + ((stack.cards.length-1) * ((BJ.cardWidth) + BJ.cardGap)),
@@ -607,8 +610,7 @@
         if(!this.facedown){
             this.facedown = true;
             this.view
-                .addClass("facedown")
-                .html("");
+                .addClass("facedown");
         }
         return this;
     };
@@ -616,11 +618,7 @@
         if(this.facedown){
             this.facedown = false;
             this.view
-                .removeClass("facedown")
-                .html(
-                    "<span class='card-icon-top'>"+this.suit.icon+"<br>"+this.face.icon+"</span>"+
-                    "<span class='card-icon-bottom'>"+this.face.icon+"<br>"+this.suit.icon+"</span>"
-                    );
+                .removeClass("facedown");
         }
         return this;
     };

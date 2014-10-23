@@ -63,8 +63,8 @@ body {
     background-color:white;
     font-size:1em;
     margin:1px;
-    padding:.1666em;
-    border-radius:.1666em;
+    padding:.16666em;
+    border-radius:.16666em;
     width:1.6666em;
     line-height:1em;
     text-align:center;
@@ -77,11 +77,13 @@ body {
     cursor:default;
     vertical-align: middle;
     position:absolute;
-    -webkit-transition:top .3s, left .3s;
-    -moz-transition:top .3s, left .3s;
-    transition:top .3s, left .3s;
+    -webkit-transition:top .35s, left .35s, transform .35s;
+    -moz-transition:top .35s, left .35s, transform .35s;
+    transition:top .35s, left .35s, transform .35s;
 }
 .card-back,.facedown {
+    transform:rotateY(180deg);
+
     background-color: #4C6694;
     background-image:
     repeating-linear-gradient(120deg, rgba(255,255,255,.1), rgba(255,255,255,.1) 2px, transparent 2px, transparent 48%),
@@ -89,6 +91,9 @@ body {
     linear-gradient(60deg, rgba(0,0,0,.1) 25%, transparent 25%, transparent 75%, rgba(0,0,0,.1) 75%, rgba(0,0,0,.1)),
     linear-gradient(120deg, rgba(0,0,0,.1) 25%, transparent 25%, transparent 75%, rgba(0,0,0,.1) 75%, rgba(0,0,0,.1));
     background-size: .4em .8em;
+}
+.facedown .card-icon-top, .facedown .card-icon-bottom {
+    display:none;
 }
 .ondeck {
     display:none;
