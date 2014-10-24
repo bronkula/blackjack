@@ -1,5 +1,5 @@
-define(['jquery','underscore','GameValues'],
-    function(j,u,GV){
+define(['jquery','underscore'],
+    function(j,u){
 // CARD CLASS
 
     // Card Constructor
@@ -7,7 +7,6 @@ define(['jquery','underscore','GameValues'],
         this.id = +face.value + (suit.value * 13);
         this.suit = suit;
         this.face = face;
-        console.log(this)
         this.view = $(
             "<span class='card facedown' style='color:"+this.suit.color+"'>"+
                 "<span class='card-icon-top'>"+this.suit.icon+"<br>"+this.face.icon+"</span>"+
@@ -38,42 +37,9 @@ define(['jquery','underscore','GameValues'],
             "z-index":this.pos.z
         });
     }
-    Card.prototype.player = function(){
-        return this.stack.player;
+    Card.prototype.entity = function(){
+        return this.stack.entity;
     }
-
-    // This function should be modified for each new game
-    // Containing the way in which each stack will orient its cards
-    Card.prototype.setStackPosition = function(position) {
-        // console.log(deckposition)
-        position = position===undefined ? this.stack.cards.length-1 : position;
-        // console.log(this);
-        this.pos.z = (60 * (this.stack.id)) + this.stack.cards.length;
-        if(this.player().name=="Deck") 
-        {
-            this.setPos(
-                this.stack.pos.x + Math.floor(position/GV.stackModulo)*2, 
-                this.stack.pos.y - Math.floor(position/GV.stackModulo)*2
-                );
-            this.pos.z = position;
-        }
-        else if(this.player().name=="Discard")
-        {
-            this.setPos(
-                this.stack.pos.x + ((this.stack.cards.length-1) * ((GV.cardWidth/10) + GV.cardGap)),
-                this.stack.pos.y
-                );
-        }
-        else
-        {
-            this.setPos(
-                this.stack.pos.x + ((this.stack.cards.length-1) * ((GV.cardWidth) + GV.cardGap)),
-                this.stack.pos.y
-                );
-        }
-        this.drawPos();
-        return this;
-    };
     Card.prototype.addFaceDown = function(){
         if(!this.facedown){
             this.facedown = true;

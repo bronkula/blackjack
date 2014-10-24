@@ -1,10 +1,12 @@
-define(['Card','SuitFace'],function(Card,SF){
+define(['Card','SuitFace','GameValues','GameMechanics'],
+    function(Card,SF,GV,GM){
+
 // STACK CLASS
     //Stack Constructor
-    CardStack = function(player,id,x,y){
+    CardStack = function(entity,id,x,y){
         this.cards = [];
         this.id = id;
-        this.player = player;
+        this.entity = entity;
         this.pos = {
             x:x,
             y:y
@@ -18,7 +20,7 @@ define(['Card','SuitFace'],function(Card,SF){
         while(this.cards.length) {
             card = this.cards.splice(Math.floor(Math.random()*this.cards.length),1)[0];
             if(!this.id) {
-                card.setStackPosition(temp.length);
+                GM.setStackPosition(card,temp.length);
             }
             temp.push(card);
         }
@@ -35,6 +37,12 @@ define(['Card','SuitFace'],function(Card,SF){
         }
         return this;
     };
+    CardStack.prototype.drawDeck = function(){
+        for(var i in this.cards) {
+            GV.viewCards.append(this.cards[i].view);
+        }
+        return this;
+    }
     // Sort cards by either suit or face
     CardStack.prototype.orderBy = function(ord){
         this.cards = _.sortBy(this.cards,function(card){ return card[ord].value; });
@@ -48,18 +56,18 @@ define(['Card','SuitFace'],function(Card,SF){
     // Trade all cards to another stack face down
     CardStack.prototype.gatherCards = function(stack){
         while(this.cards.length) {
-            this.tradeCard(stack,0)
-                .addFaceDown()
-                .setStackPosition();
+            GM.setStackPosition(
+                this.tradeCard(stack,0).addFaceDown()
+                );
         }
         return this;
     }
     // Send all cards to another stack face up
     CardStack.prototype.discardCards = function(stack){
         while(this.cards.length) {
-            this.tradeCard(stack,0)
-                .removeFaceDown()
-                .setStackPosition();
+            GM.setStackPosition(
+                this.tradeCard(stack,0).removeFaceDown()
+                );
         }
         return this;
     }
@@ -69,14 +77,14 @@ define(['Card','SuitFace'],function(Card,SF){
         // console.log(stack1,stack2,card)
         var card = this.cards.splice(card,1)[0];
         stack.cards.push(card);
-        card.stackId = stack.id;
+        card.stack = stack;
         return card;
     };
     // Remove a card from this stack and add to bottom of other stack
     CardStack.prototype.sneakCard = function(stack,card){
         var card = this.cards.splice(card,1)[0];
         stack.cards.unshift(card);
-        card.stackId = stack.id;
+        card.stack = stack;
         return card;
     };
     // Trade top card from this stack

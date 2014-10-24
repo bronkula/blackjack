@@ -9,7 +9,7 @@ define(['CardStack'],function(){
     Entity.prototype.makeStacks = function(num){
         this.stacks = [];
         for(var i = 0; i<num; i++) {
-            this.stacks[i] = new CardStack(this,i);
+            this.stacks[i] = new CardStack(this,i,this.pos.x,this.pos.y);
         }
         return this;
     };

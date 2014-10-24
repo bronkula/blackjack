@@ -13,6 +13,7 @@ require.config({
     'Discard': 'partials/Discard',
     'Game': 'partials/CardGame',
     'GameValues': 'partials/GameValues',
+    'GameMechanics': 'partials/GameMechanics',
     'GameEntities': 'partials/GameEntities',
     'BlackJack': 'partials/BlackJack'
   }

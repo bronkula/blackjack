@@ -1,25 +1,22 @@
-define(['underscore', 'jquery', 'Player', 'Dealer', 'Deck',
-    'Discard', 'StackCommand', 'GameValues'], 
-    function(underscore,jquery,Player,Dealer,Deck,
-        Discard,StackCommand,GV) {
-
+define(['underscore', 'jquery', 'StackCommand', 'GameValues', 'GameMechanics',
+    'Deck','Dealer','Player','Discard'], 
+    function(underscore,jquery,StackCommand,GV,
+        Deack,Dealer,Player,Discard) {
     cmdStack = new StackCommand();
 
 // INITIALIZER
     init = function(){
 
+        $(".game-version").html("v"+GV.gameVersion);
+
         $(".view-cards").css({"font-size":GV.cardFontSize+"px"});
         $(".title-dealer").css({"top":(GV.rowGap+GV.cardHeight+GV.cardGap)+"px"});
         $(".title-player").css({"top":(((GV.rowGap+GV.cardHeight)*2)+GV.cardGap)+"px"});
 
-        // viewGame = $(".view-game");
-        // viewCards = $(".view-cards");
-        // viewControls = $(".view-controls");
-        // viewStats = $(".view-stats");
 
         // $("h1").on("click",startGame);
         // $(".js-dealcards").on("click",function(){
-        //     GV.deck().freshDeck().shuffle();
+        //     GM.deck(0).freshDeck().shuffle();
         // });
         $(".js-newgame").on("click",startGame);
         // $(".js-gathercards").on("click",function(){
@@ -31,25 +28,25 @@ define(['underscore', 'jquery', 'Player', 'Dealer', 'Deck',
         //     // deck().reOrder().shuffle();
         // });
         // $(".js-shuffledeck").on("click",function(){
-        //     GV.deck().shuffle();
+        //     GM.deck(0).shuffle();
         //     // drawTable();
         // });
         // $(".js-dealplayer").on("click",function(){
-        //     if(GV.deck().cards.length) {
-        //         GV.deck().dealTo(GV.player())
+        //     if(GM.deck(0).cards.length) {
+        //         GM.deck(0).dealTo(GM.player(0))
         //             .removeFaceDown()
         //             .setStackPosition();
-        //         GV.deck().dealTo(GV.player())
+        //         GM.deck(0).dealTo(GM.player(0))
         //             .removeFaceDown()
         //             .setStackPosition();
         //     }
         // });
         // $(".js-dealdealer").on("click",function(){
-        //     if(GV.deck().cards.length) {
-        //         GV.deck().dealTo(GV.dealer())
+        //     if(GM.deck(0).cards.length) {
+        //         GM.deck(0).dealTo(GM.dealer(0))
         //             // .removeFaceDown()
         //             .setStackPosition();
-        //         GV.deck().dealTo(GV.dealer())
+        //         GM.deck(0).dealTo(GM.dealer(0))
         //             .removeFaceDown()
         //             .setStackPosition();
         //     }
@@ -92,11 +89,18 @@ define(['underscore', 'jquery', 'Player', 'Dealer', 'Deck',
     //     writeMsg("&nbsp;");
     // };
     startGame = function(){
-        // console.log(BJ)
-        GV.makeEntities();
-        console.log(GV)
+        var newentities = [
+            (new Deck(0,"Deck",GV.deckLeft,GV.deckTop)).makeStacks(1),
+            (new Dealer(1,"Dealer",GV.dealerLeft,GV.dealerTop)).makeStacks(1),
+            (new Player(2,"Player",GV.playerLeft,GV.playerTop)).makeStacks(4),
+            (new Discard(3,"Discard",GV.discardLeft,GV.discardTop)).makeStacks(1)
+        ];
+        GM.makeEntities(newentities);
+        // console.log(GV)
+
         $(".view-cards").empty();
-        // GV.deck().freshDeck().shuffle();
+        GM.deck(0).freshDeck().drawDeck().shuffle();
+        // GM.deck(0).freshDeck().shuffle();
     };
 
 
@@ -127,38 +131,38 @@ define(['underscore', 'jquery', 'Player', 'Dealer', 'Deck',
         // $(".view-stats").empty();
         // console.log(deck,deck.shuffle(),deck);
         var $div = $("<div class='row'>");
-        for(var i in GV.deck().cards) {
-            card = GV.deck().cards[i];
+        for(var i in GM.deck(0).cards) {
+            card = GM.deck(0).cards[i];
             $div.append(card.view," ");
         }
         viewStats.append($div);
     };
 
     gatherCards = function(){
-        GV.dealer().gatherCards(GV.deck());
-        GV.player().gatherCards(GV.deck());
-        GV.discard().gatherCards(GV.deck());
-        GV.deck().drawStack();
+        GM.dealer(0).gatherCards(GM.deck(0));
+        GM.player(0).gatherCards(GM.deck(0));
+        GM.discard(0).gatherCards(GM.deck(0));
+        GM.deck(0).drawStack();
         // $(".view-cards").empty();
     };
     discardHands = function(){
-        GV.dealer().discardCards(GV.discard());
-        GV.player().discardCards(GV.discard());
-        if(!GV.deck().cards.length) gatherDiscard();
+        GM.dealer(0).discardCards(GM.discard(0));
+        GM.player(0).discardCards(GM.discard(0));
+        if(!GM.deck(0).cards.length) gatherDiscard();
         // $(".view-cards").empty();
     };
     gatherDiscard = function(){
         // cmdStack.addCmd(function(){discard().gatherCards();},0)
         // .addCmd(function(){deck().shuffle()},100).addCmd(function(){deck().shuffle()},100)
-        GV.discard().gatherCards();
-        GV.deck().shuffle().shuffle();
+        GM.discard(0).gatherCards();
+        GM.deck(0).shuffle().shuffle();
         cmdStack.delay(300);
     }
     dealerScore = function(){
-        return GV.dealer().firstCard().facedown ? GV.dealer().cards[1].face.points : GV.dealer().points;
+        return GM.dealer(0).firstCard().facedown ? GM.dealer(0).cards[1].face.points : GM.dealer(0).points;
     };
     playerScore = function(){
-        return GV.player().points;
+        return GM.player(0).points;
     };
     writeScores = function(){
         $(".title-dealer .title-points").html(dealerScore());
@@ -207,7 +211,7 @@ define(['underscore', 'jquery', 'Player', 'Dealer', 'Deck',
 
     };
     checkScenario = function(){
-        var d = GV.dealer(), p = GV.player();
+        var d = GM.dealer(0), p = GM.player(0);
         // console.log(d.points,p.points)
         result = false;
         
@@ -294,32 +298,32 @@ define(['underscore', 'jquery', 'Player', 'Dealer', 'Deck',
     };
 
     playDealer = function(){
-        GV.dealer().cards[0].removeFaceDown();
+        GM.dealer(0).cards[0].removeFaceDown();
         cmdStack.addCmd(makeDealerChoice,10);
     };
     makeDealerChoice = function(){
-        if(!GV.deck().cards.length) {
+        if(!GM.deck(0).cards.length) {
             gatherDiscard();
         }
         if(checkScenario()) {
-            GV.deck().dealTo(GV.dealer())
-                .removeFaceDown()
-                .setStackPosition();
-            checkCard(GV.dealer(),GV.dealer().lastCard());
+            GM.setStackPosition(
+                GM.deck(0).dealTo(GM.dealer(0)).removeFaceDown()
+                );
+            checkCard(GM.dealer(0),GM.dealer(0).lastCard());
             cmdStack.addCmd(makeDealerChoice,200);
         }
     };
 
     gameMove = function(str) {
         if(
-            !GV.deck().cards.length &&
-            !GV.dealer().cards.length &&
-            !GV.player().cards.length &&
-            !GV.discard().cards.length
+            !GM.deck(0).cards.length &&
+            !GM.dealer(0).cards.length &&
+            !GM.player(0).cards.length &&
+            !GM.discard(0).cards.length
             ) {
-            GV.deck().freshDeck().shuffle().shuffle();
+            GM.deck(0).freshDeck().shuffle().shuffle();
         }
-        if(!GV.deck().cards.length) {
+        if(!GM.deck(0).cards.length) {
             gatherDiscard();
         }
 
@@ -338,66 +342,68 @@ define(['underscore', 'jquery', 'Player', 'Dealer', 'Deck',
         }
     }
     dealInitial = function(){
-        if(GV.dealer().cards.length || GV.player().cards.length) {
-            if(GV.dealer().firstCard().facedown) {
+        if(GM.dealer(0).cards.length || GM.player(0).cards.length) {
+            if(GM.dealer(0).firstCard().facedown) {
                 writeMsg("Finish the hand first");
                 return;
             } else {
                 cmdStack.addCmd(discardHands,150);
             }
         }
-        if(GV.deck().cards.length || GV.discard().cards.length) {
-            if(GV.deck().cards.length<4){
+        if(GM.deck(0).cards.length || GM.discard(0).cards.length) {
+            if(GM.deck(0).cards.length<4){
                 gatherDiscard();
             }
             cmdStack.addCmd(function(){
-                GV.deck().dealTo(GV.player())
-                    .removeFaceDown()
-                    .setStackPosition();
+                GM.setStackPosition(
+                    GM.deck(0).dealTo(GM.player(0)).removeFaceDown()
+                    );
             },100)
             .addCmd(function(){
-                GV.deck().dealTo(GV.dealer())
+                GM.setStackPosition(
+                    GM.deck(0).dealTo(GM.dealer(0))
                     // .removeFaceDown()
-                    .setStackPosition();
+                    );
             },100)
             .addCmd(function(){
-                GV.deck().dealTo(GV.player())
-                    .removeFaceDown()
-                    .setStackPosition();
+                GM.setStackPosition(
+                    GM.deck(0).dealTo(GM.player(0)).removeFaceDown()
+                    );
             },100)
             .addCmd(function(){
-                GV.deck().dealTo(GV.dealer())
-                    .removeFaceDown()
-                    .setStackPosition();
+                GM.setStackPosition(
+                    GM.deck(0).dealTo(GM.dealer(0)).removeFaceDown()
+                    );
             },100)
             .addCmd(function(){
-                checkHand(GV.player());
-                checkHand(GV.dealer());
+                checkHand(GM.player(0));
+                checkHand(GM.dealer(0));
                 checkScenario();
             },0);
         }
+        console.log(GV)
     };
     hitPlayer = function(){
-        if(!GV.dealer().firstCard().facedown){
+        if(!GM.dealer(0).firstCard().facedown){
             writeMsg("Game Over<br>Deal a New Hand");
             return;
         }
-        if(GV.deck().cards.length || GV.discard().cards.length) {
+        if(GM.deck(0).cards.length || GM.discard(0).cards.length) {
             cmdStack.addCmd(function(){
-                GV.deck().dealTo(GV.player())
-                    .removeFaceDown()
-                    .setStackPosition();
-                checkHand(GV.player());
+                GM.setStackPosition(
+                    GM.deck(0).dealTo(GM.player(0)).removeFaceDown()
+                    );
+                checkHand(GM.player(0));
                 checkScenario();
             },100);
         }
     };
     stayPlayer = function(){
-        if(!GV.dealer().firstCard().facedown){
+        if(!GM.dealer(0).firstCard().facedown){
             writeMsg("Game Over<br>Deal a New Hand");
             return;
         }
-        if(GV.deck().cards.length || GV.discard().cards.length) {
+        if(GM.deck(0).cards.length || GM.discard(0).cards.length) {
             playDealer();
         }
     };

@@ -1,8 +1,14 @@
-define(['Dealer','Deck','Player','Discard'],
-    function(Dealer,Deck,Player,Discard){
+define(['jquery'],function(){
 // DATABASE
     // Random important heights lengths widths shits
     GV = {};
+
+
+    GV.gameVersion = 0.6;
+    GV.creator = "Hamilton Cline";
+    GV.creatorEmail = "hamdiggy@gmail.com";
+    GV.creatorwebsite = "http://www.hamiltondraws.com";
+
     GV.stackModulo = 5;
     GV.cardFontSize = 30;
     GV.cardWidth = GV.cardFontSize*1.6666;
@@ -23,41 +29,17 @@ define(['Dealer','Deck','Player','Discard'],
     GV.discardTop = GV.playerTop + GV.cardHeight + GV.rowGap;
     GV.discardLeft = 0;
 
-
-
     GV.playerMoney = 100;
     GV.playerBet = 10;
 
-
-
-
     GV.entities = [];
 
-    GV.makeEntities = function(){ 
-        GV.entities = [];
-        GV.entities[0] = new Deck(0,"Deck",GV.deckLeft,GV.deckTop);
-        GV.entities[1] = new Dealer(1,"Dealer",GV.dealerLeft,GV.dealerTop);
-        GV.entities[2] = new Player(2,"Player",GV.playerLeft,GV.playerTop);
-        GV.entities[3] = new Discard(3,"Discard",GV.discardLeft,GV.discardTop);
 
-        GV.deck().makeStacks(1).cards().freshDeck().shuffle().shuffle();
-        GV.dealer().makeStacks(1);
-        GV.player().makeStacks(4);
-        GV.discard().makeStacks(1);
-    };
-    GV.deck = function(){
-        return GV.entities[0];
-    };
-    GV.dealer = function(){
-        return GV.entities[1];
-    };
-    GV.player = function(){
-        return GV.entities[2];
-    };
-    GV.discard = function(){
-        return GV.entities[3];
-    };
 
-    
+    GV.viewGame = $(".view-game");
+    GV.viewCards = $(".view-cards");
+    GV.viewControls = $(".view-controls");
+    GV.viewStats = $(".view-stats");
+
     return GV;
 });
