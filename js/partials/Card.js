@@ -82,5 +82,5 @@ define(['jquery','underscore','SuitFace'],function(){
         return this;
     };
     
-    return {Card:Card};
+    return Card;
 });

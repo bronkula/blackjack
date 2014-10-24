@@ -13,10 +13,10 @@ require.config({
     'Discard': 'partials/Discard',
     'Game': 'partials/CardGame',
     'GameValues': 'partials/GameValues',
-    'BlackJack': 'partials/BlackJack',
+    'GameEntities': 'partials/GameEntities',
+    'BlackJack': 'partials/BlackJack'
   }
 });
-require(['BlackJack'],function(game){
-    console.log(game);
-    game.init();
+require(['BlackJack'],function(BlackJack){
+    BlackJack.init();
 })

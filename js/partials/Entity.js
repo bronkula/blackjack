@@ -5,14 +5,15 @@ define(['CardStack'],function(){
         this.name = name;
         this.stacks = [];
         this.pos.x = x;
-        this.pos.y = t;
+        this.pos.y = y;
     };
     Entity.prototype.makeStacks = function(num,x,y){
         this.stacks = [];
         for(var i = 0; i<num; i++) {
             this.stacks[i] = new CardStack(this,i,x,y);
         }
+        return this;
     };
 
-    return {Entity:Entity};
+    return Entity;
 });

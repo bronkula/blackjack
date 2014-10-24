@@ -100,5 +100,5 @@ define(['Card','SuitFace'],function(){
         return this.cards[0];
     };
     
-    return {CardStack:CardStack};
+    return CardStack;
 });

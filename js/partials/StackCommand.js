@@ -60,5 +60,5 @@ define(function(){
         this.timer = false;
     };
     
-    return {StackCommand:StackCommand};
+    return StackCommand;
 });

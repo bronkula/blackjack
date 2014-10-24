@@ -29,6 +29,19 @@ define(function(){
 
 
 
+    BJ.deck = function(){
+        return BJ.stacks[0];
+    }
+    BJ.dealer = function(){
+        return BJ.stacks[1];
+    }
+    BJ.player = function(){
+        return BJ.stacks[2];
+    }
+    BJ.discard = function(){
+        return BJ.stacks[3];
+    }
+
 
     
     return BJ;

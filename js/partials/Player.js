@@ -1,12 +1,18 @@
-define(['Entity'],function(){
+define(['Entity'],function(Entity){
 
     Player = function(id,name,x,y){
+        Entity.apply(this,arguments);
         this.id = id;
         this.name = name;
         this.stacks = [];
         this.pos.x = x;
-        this.pos.y = t;
+        this.pos.y = y;
+        this.money = 100;
+        this.bet = 10;
     };
 
-    return {Player:Player};
+    Player.prototype = Entity.prototype;
+    Player.prototype.constructor = Player;
+
+    return Player;
 });
