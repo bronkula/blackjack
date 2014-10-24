@@ -1,4 +1,4 @@
-define([],function(){
+define(function(){
     StackCommand = function(){
         this.commands = [];
         this.currentCommand = false;

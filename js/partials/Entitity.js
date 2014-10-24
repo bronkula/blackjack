@@ -1,6 +1,6 @@
 define(['CardStack'],function(){
 
-    function Entity = function(id,name,x,y){
+    Entity = function(id,name,x,y){
         this.id = id;
         this.name = name;
         this.stacks = [];

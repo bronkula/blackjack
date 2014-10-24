@@ -1,6 +1,6 @@
 define(['Entity'],function(){
 
-    function Deck = function(id,name,x,y){
+    Deck = function(id,name,x,y){
         this.id = id;
         this.name = name;
         this.stacks = [];
