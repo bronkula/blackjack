@@ -40,8 +40,6 @@ define(['GameValues'],function(GV){
     GM.setStackPosition = function(card,position) {
         position = position===undefined ? card.stack.cards.length-1 : position;
 
-        console.log(card.entity().name)
-
         card.pos.z = (60 * (card.stack.id)) + card.stack.cards.length;
         if(card.entity().name=="Deck") 
         {

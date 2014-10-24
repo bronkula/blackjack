@@ -1,7 +1,9 @@
-define(['underscore', 'jquery', 'StackCommand', 'GameValues', 'GameMechanics',
+define(['underscore', 'jquery', 'StackCommand', 
+    'GameValues', 'GameMechanics', 'ViewMechanics',
     'Deck','Dealer','Player','Discard'], 
-    function(underscore,jquery,StackCommand,GV,
-        Deack,Dealer,Player,Discard) {
+    function(underscore,jquery,StackCommand,
+        GV,GM,VM,
+        Deck,Dealer,Player,Discard) {
     cmdStack = new StackCommand();
 
 // INITIALIZER
@@ -86,7 +88,7 @@ define(['underscore', 'jquery', 'StackCommand', 'GameValues', 'GameMechanics',
     //         new CardStack(2,"Player",[],playerLeft,playerTop),
     //         new CardStack(3,"Discard",[],discardLeft,discardTop)
     //     ];
-    //     writeMsg("&nbsp;");
+    //     VM.writeMsg("&nbsp;");
     // };
     startGame = function(){
         var newentities = [
@@ -119,7 +121,6 @@ define(['underscore', 'jquery', 'StackCommand', 'GameValues', 'GameMechanics',
         }
         if(type==1){
             playerMoney += playerBet;
-
         }
         if(type==2){
             playerMoney += Math.ceil(playerBet * 1.5);
@@ -167,7 +168,7 @@ define(['underscore', 'jquery', 'StackCommand', 'GameValues', 'GameMechanics',
     writeScores = function(){
         $(".title-dealer .title-points").html(dealerScore());
         $(".title-player .title-points").html(playerScore());
-        // addMsg("<br>Dealer is showing "+dealerScore()+"<br>You are showing "+playerScore());
+        // VM.addMsg("<br>Dealer is showing "+dealerScore()+"<br>You are showing "+playerScore());
     }
 
 
@@ -220,37 +221,37 @@ define(['underscore', 'jquery', 'StackCommand', 'GameValues', 'GameMechanics',
             if(p.points==21)
             {
                 // console.log("Scenario 1")
-                writeMsg("It's a Draw!");
+                VM.writeMsg("It's a Draw!");
             }
             else if(d.cards.length==2)
             {
                 // console.log("Scenario 2")
-                writeMsg("Dealer Blackjack! You Lose!");
+                VM.writeMsg("Dealer Blackjack! You Lose!");
                 changeMoney(0);
             }
             else
             {
                 // console.log("Scenario 3")
-                writeMsg("Dealer 21! You Lose!");
+                VM.writeMsg("Dealer 21! You Lose!");
                 changeMoney(0);
             }
         }
         else if(p.cards.length==2 && p.points==21)
         {
                 // console.log("Scenario 4")
-            writeMsg("Blackjack! You Win!");
+            VM.writeMsg("Blackjack! You Win!");
             changeMoney(2);
         }
         else if(d.points>21)
         {
                 // console.log("Scenario 5")
-            writeMsg("Dealer Busts! You Win!");
+            VM.writeMsg("Dealer Busts! You Win!");
             changeMoney(1);
         }
         else if(p.points>21)
         {
                 // console.log("Scenario 6")
-            writeMsg("Player Busts! You Lose");
+            VM.writeMsg("Player Busts! You Lose");
             changeMoney(0);
         }
         else if(d.points>16 && !d.firstCard().facedown)
@@ -258,30 +259,30 @@ define(['underscore', 'jquery', 'StackCommand', 'GameValues', 'GameMechanics',
             if(d.points>p.points)
             {
                 // console.log("Scenario 7")
-                writeMsg("Dealer Wins! You Lose!");
+                VM.writeMsg("Dealer Wins! You Lose!");
                 changeMoney(0);
             }
             else if(d.points==p.points)
             {
                 // console.log("Scenario 8")
-                writeMsg("It's a Draw!");
+                VM.writeMsg("It's a Draw!");
             }
             else
             {
                 // console.log("Scenario 9")
-                writeMsg("You Win!");
+                VM.writeMsg("You Win!");
                 changeMoney(1);
             }
         }
         else if(p.points==21 && !d.firstCard().facedown)
         {
                 // console.log("Scenario 10")
-            writeMsg("21!");
+            VM.writeMsg("21!");
             result = true;
         }
         else
         {
-            // writeMsg("No Change");
+            // VM.writeMsg("No Change");
                 // console.log("Scenario 11")
             result = true;
         }
@@ -293,7 +294,7 @@ define(['underscore', 'jquery', 'StackCommand', 'GameValues', 'GameMechanics',
             // discardHands();
         }
         writeScores();
-        // addMsg("<br>Dealer is showing "+dealerScore()+"<br>You are showing "+playerScore());
+        // VM.addMsg("<br>Dealer is showing "+dealerScore()+"<br>You are showing "+playerScore());
         return result;
     };
 
@@ -327,7 +328,7 @@ define(['underscore', 'jquery', 'StackCommand', 'GameValues', 'GameMechanics',
             gatherDiscard();
         }
 
-        writeMsg("&nbsp;");
+        VM.writeMsg("&nbsp;");
 
         switch(str) {
             case "deal":
@@ -344,7 +345,7 @@ define(['underscore', 'jquery', 'StackCommand', 'GameValues', 'GameMechanics',
     dealInitial = function(){
         if(GM.dealer(0).cards.length || GM.player(0).cards.length) {
             if(GM.dealer(0).firstCard().facedown) {
-                writeMsg("Finish the hand first");
+                VM.writeMsg("Finish the hand first");
                 return;
             } else {
                 cmdStack.addCmd(discardHands,150);
@@ -381,11 +382,10 @@ define(['underscore', 'jquery', 'StackCommand', 'GameValues', 'GameMechanics',
                 checkScenario();
             },0);
         }
-        console.log(GV)
     };
     hitPlayer = function(){
         if(!GM.dealer(0).firstCard().facedown){
-            writeMsg("Game Over<br>Deal a New Hand");
+            VM.writeMsg("Game Over<br>Deal a New Hand");
             return;
         }
         if(GM.deck(0).cards.length || GM.discard(0).cards.length) {
@@ -400,19 +400,12 @@ define(['underscore', 'jquery', 'StackCommand', 'GameValues', 'GameMechanics',
     };
     stayPlayer = function(){
         if(!GM.dealer(0).firstCard().facedown){
-            writeMsg("Game Over<br>Deal a New Hand");
+            VM.writeMsg("Game Over<br>Deal a New Hand");
             return;
         }
         if(GM.deck(0).cards.length || GM.discard(0).cards.length) {
             playDealer();
         }
-    };
-
-    writeMsg = function(msg) {
-        $(".db-message").html(msg);
-    };
-    addMsg = function(msg) {
-        $(".db-message").append(msg);
     };
 
 
