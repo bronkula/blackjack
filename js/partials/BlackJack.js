@@ -462,5 +462,5 @@ define(['underscore', 'jquery', 'Player', 'Dealer', 'Deck', 'Discard', 'StackCom
 
 
 
-    return {BJ:BJ};
+    return {init:init};
 });

@@ -16,5 +16,5 @@ require.config({
   }
 });
 require(['BlackJack'],function(){
-    BJ.init();
+    init();
 })

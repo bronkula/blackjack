@@ -1,4 +1,4 @@
-;(function(w){
+define([],function(){
     StackCommand = function(){
         this.commands = [];
         this.currentCommand = false;
@@ -59,5 +59,6 @@
         clearTimeout(this.timer);
         this.timer = false;
     };
-    w.StackCommand = StackCommand;
-})(window);
+    
+    return {StackCommand:StackCommand};
+});

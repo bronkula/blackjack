@@ -1,4 +1,4 @@
-define(['SuitFace'],function(){
+define(['jquery','underscore','SuitFace'],function(){
 // CARD CLASS
 
     // Card Constructor
