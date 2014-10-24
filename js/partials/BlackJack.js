@@ -1,65 +1,64 @@
 define(['underscore', 'jquery', 'Player', 'Dealer', 'Deck',
-    'Discard', 'StackCommand', 'GameValues', 'GameEntities'], 
+    'Discard', 'StackCommand', 'GameValues'], 
     function(underscore,jquery,Player,Dealer,Deck,
-        Discard,StackCommand,GV,GE) {
+        Discard,StackCommand,GV) {
 
+    cmdStack = new StackCommand();
 
 // INITIALIZER
     init = function(){
-
-        BJ.cmdStack = new StackCommand();
 
         $(".view-cards").css({"font-size":GV.cardFontSize+"px"});
         $(".title-dealer").css({"top":(GV.rowGap+GV.cardHeight+GV.cardGap)+"px"});
         $(".title-player").css({"top":(((GV.rowGap+GV.cardHeight)*2)+GV.cardGap)+"px"});
 
-        BJ.viewGame = $(".view-game");
-        BJ.viewCards = $(".view-cards");
-        BJ.viewControls = $(".view-controls");
-        BJ.viewStats = $(".view-stats");
+        // viewGame = $(".view-game");
+        // viewCards = $(".view-cards");
+        // viewControls = $(".view-controls");
+        // viewStats = $(".view-stats");
 
-        $("h1").on("click",BJ.startGame);
-        $(".js-dealcards").on("click",function(){
-            GV.deck().freshDeck().shuffle();
-        });
-        $(".js-newgame").on("click",BJ.startGame);
-        $(".js-gathercards").on("click",function(){
-            BJ.gatherCards();
-            // BJ.deck().reOrder().shuffle();
-        });
-        $(".js-discardhands").on("click",function(){
-            BJ.discardHands();
-            // BJ.deck().reOrder().shuffle();
-        });
-        $(".js-shuffledeck").on("click",function(){
-            GV.deck().shuffle();
-            // BJ.drawTable();
-        });
-        $(".js-dealplayer").on("click",function(){
-            if(GV.deck().cards.length) {
-                GV.deck().dealTo(GV.player())
-                    .removeFaceDown()
-                    .setStackPosition();
-                GV.deck().dealTo(GV.player())
-                    .removeFaceDown()
-                    .setStackPosition();
-            }
-        });
-        $(".js-dealdealer").on("click",function(){
-            if(GV.deck().cards.length) {
-                GV.deck().dealTo(GV.dealer())
-                    // .removeFaceDown()
-                    .setStackPosition();
-                GV.deck().dealTo(GV.dealer())
-                    .removeFaceDown()
-                    .setStackPosition();
-            }
-        });
-        $(".js-dealinitial").on("click",function(){BJ.gameMove('deal');});
-        $(".js-hitplayer").on("click",function(){BJ.gameMove('hit');});
-        $(".js-stayplayer").on("click",function(){BJ.gameMove('stay');});
-        $(".js-doubledown").on("click",function(){BJ.gameMove('double');});
-        $(".js-splitcards").on("click",function(){BJ.gameMove('split');});
+        // $("h1").on("click",startGame);
+        // $(".js-dealcards").on("click",function(){
+        //     GV.deck().freshDeck().shuffle();
+        // });
+        $(".js-newgame").on("click",startGame);
+        // $(".js-gathercards").on("click",function(){
+        //     gatherCards();
+        //     // deck().reOrder().shuffle();
+        // });
+        // $(".js-discardhands").on("click",function(){
+        //     discardHands();
+        //     // deck().reOrder().shuffle();
+        // });
+        // $(".js-shuffledeck").on("click",function(){
+        //     GV.deck().shuffle();
+        //     // drawTable();
+        // });
+        // $(".js-dealplayer").on("click",function(){
+        //     if(GV.deck().cards.length) {
+        //         GV.deck().dealTo(GV.player())
+        //             .removeFaceDown()
+        //             .setStackPosition();
+        //         GV.deck().dealTo(GV.player())
+        //             .removeFaceDown()
+        //             .setStackPosition();
+        //     }
+        // });
+        // $(".js-dealdealer").on("click",function(){
+        //     if(GV.deck().cards.length) {
+        //         GV.deck().dealTo(GV.dealer())
+        //             // .removeFaceDown()
+        //             .setStackPosition();
+        //         GV.deck().dealTo(GV.dealer())
+        //             .removeFaceDown()
+        //             .setStackPosition();
+        //     }
+        // });
+        $(".js-dealinitial").on("click",function(){gameMove('deal');});
+        $(".js-hitplayer").on("click",function(){gameMove('hit');});
+        $(".js-stayplayer").on("click",function(){gameMove('stay');});
+        $(".js-doubledown").on("click",function(){gameMove('double');});
+        $(".js-splitcards").on("click",function(){gameMove('split');});
 
 
 
@@ -68,102 +67,103 @@ define(['underscore', 'jquery', 'Player', 'Dealer', 'Deck',
             console.log($(this).data("card"));
         })
         .on("keypress",function(e){
-            if(e.keyCode==97) BJ.dealInitial();
-            else if(e.keyCode==115) BJ.hitPlayer();
-            else if(e.keyCode==100) BJ.stayPlayer();
+            if(e.keyCode==97) dealInitial();
+            else if(e.keyCode==115) hitPlayer();
+            else if(e.keyCode==100) stayPlayer();
         })
         ;
 
-        BJ.makeGameDB();
-        BJ.drawGameDB();
+        makeGameDB();
+        drawGameDB();
 
-        BJ.startGame();
+        startGame();
     };
 
 
 
 // BASIC GAME FUNCTIONS
-    BJ.resetStacks = function(){
-        BJ.stacks = [
-            new CardStack(0,"Deck",[],BJ.deckLeft,BJ.deckTop),
-            new CardStack(1,"Dealer",[],BJ.dealerLeft,BJ.dealerTop),
-            new CardStack(2,"Player",[],BJ.playerLeft,BJ.playerTop),
-            new CardStack(3,"Discard",[],BJ.discardLeft,BJ.discardTop)
-        ];
-        BJ.writeMsg("&nbsp;");
-    };
-    BJ.startGame = function(){
-        console.log(BJ)
-        BJ.resetStacks();
+    // resetStacks = function(){
+    //     stacks = [
+    //         new CardStack(0,"Deck",[],deckLeft,deckTop),
+    //         new CardStack(1,"Dealer",[],dealerLeft,dealerTop),
+    //         new CardStack(2,"Player",[],playerLeft,playerTop),
+    //         new CardStack(3,"Discard",[],discardLeft,discardTop)
+    //     ];
+    //     writeMsg("&nbsp;");
+    // };
+    startGame = function(){
+        // console.log(BJ)
+        GV.makeEntities();
+        console.log(GV)
         $(".view-cards").empty();
-        GV.deck().freshDeck().shuffle();
+        // GV.deck().freshDeck().shuffle();
     };
 
 
-    BJ.makeGameDB = function(){
-        BJ.playerMoney = 100;
-        BJ.playerBet = 10;
+    makeGameDB = function(){
+        playerMoney = 100;
+        playerBet = 10;
     };
-    BJ.drawGameDB = function(){
-        $(".db-money .db-value").html(BJ.playerMoney);
-        $(".db-bet .db-value").html(BJ.playerBet);
+    drawGameDB = function(){
+        $(".db-money .db-value").html(playerMoney);
+        $(".db-bet .db-value").html(playerBet);
     };
 
-    BJ.changeMoney = function(type) {
+    changeMoney = function(type) {
         if(type==0){
-            BJ.playerMoney -= BJ.playerBet;
+            playerMoney -= playerBet;
         }
         if(type==1){
-            BJ.playerMoney += BJ.playerBet;
+            playerMoney += playerBet;
 
         }
         if(type==2){
-            BJ.playerMoney += Math.ceil(BJ.playerBet * 1.5);
+            playerMoney += Math.ceil(playerBet * 1.5);
         }
     }
 
 
-    BJ.drawDeckInStats = function(){
+    drawDeckInStats = function(){
         // $(".view-stats").empty();
-        // console.log(BJ.deck,BJ.deck.shuffle(),BJ.deck);
+        // console.log(deck,deck.shuffle(),deck);
         var $div = $("<div class='row'>");
         for(var i in GV.deck().cards) {
             card = GV.deck().cards[i];
             $div.append(card.view," ");
         }
-        BJ.viewStats.append($div);
+        viewStats.append($div);
     };
 
-    BJ.gatherCards = function(){
+    gatherCards = function(){
         GV.dealer().gatherCards(GV.deck());
         GV.player().gatherCards(GV.deck());
         GV.discard().gatherCards(GV.deck());
         GV.deck().drawStack();
         // $(".view-cards").empty();
     };
-    BJ.discardHands = function(){
+    discardHands = function(){
         GV.dealer().discardCards(GV.discard());
         GV.player().discardCards(GV.discard());
-        if(!GV.deck().cards.length) BJ.gatherDiscard();
+        if(!GV.deck().cards.length) gatherDiscard();
         // $(".view-cards").empty();
     };
-    BJ.gatherDiscard = function(){
-        // BJ.cmdStack.addCmd(function(){BJ.discard().gatherCards();},0)
-        // .addCmd(function(){BJ.deck().shuffle()},100).addCmd(function(){BJ.deck().shuffle()},100)
+    gatherDiscard = function(){
+        // cmdStack.addCmd(function(){discard().gatherCards();},0)
+        // .addCmd(function(){deck().shuffle()},100).addCmd(function(){deck().shuffle()},100)
         GV.discard().gatherCards();
         GV.deck().shuffle().shuffle();
-        BJ.cmdStack.delay(300);
+        cmdStack.delay(300);
     }
-    BJ.dealerScore = function(){
+    dealerScore = function(){
         return GV.dealer().firstCard().facedown ? GV.dealer().cards[1].face.points : GV.dealer().points;
     };
-    BJ.playerScore = function(){
+    playerScore = function(){
         return GV.player().points;
     };
-    BJ.writeScores = function(){
-        $(".title-dealer .title-points").html(BJ.dealerScore());
-        $(".title-player .title-points").html(BJ.playerScore());
-        // BJ.addMsg("<br>Dealer is showing "+BJ.dealerScore()+"<br>You are showing "+BJ.playerScore());
+    writeScores = function(){
+        $(".title-dealer .title-points").html(dealerScore());
+        $(".title-player .title-points").html(playerScore());
+        // addMsg("<br>Dealer is showing "+dealerScore()+"<br>You are showing "+playerScore());
     }
 
 
@@ -171,14 +171,14 @@ define(['underscore', 'jquery', 'Player', 'Dealer', 'Deck',
 
 
 // GAME FUNCTIONS
-    BJ.checkHand = function(hand){
+    checkHand = function(hand){
         hand.points = 0;
         hand.soft = false;
         for(var i=0,l=hand.cards.length; i<l; i++) {
-            BJ.checkCard(hand,hand.cards[i]);
+            checkCard(hand,hand.cards[i]);
         }
     };
-    BJ.checkCard = function(hand,card){
+    checkCard = function(hand,card){
         // calculate aces
         if(card.face.value==0) {
             if(hand.points+11<=21) {
@@ -206,7 +206,7 @@ define(['underscore', 'jquery', 'Player', 'Dealer', 'Deck',
         }
 
     };
-    BJ.checkScenario = function(){
+    checkScenario = function(){
         var d = GV.dealer(), p = GV.player();
         // console.log(d.points,p.points)
         result = false;
@@ -216,68 +216,68 @@ define(['underscore', 'jquery', 'Player', 'Dealer', 'Deck',
             if(p.points==21)
             {
                 // console.log("Scenario 1")
-                BJ.writeMsg("It's a Draw!");
+                writeMsg("It's a Draw!");
             }
             else if(d.cards.length==2)
             {
                 // console.log("Scenario 2")
-                BJ.writeMsg("Dealer Blackjack! You Lose!");
-                BJ.changeMoney(0);
+                writeMsg("Dealer Blackjack! You Lose!");
+                changeMoney(0);
             }
             else
             {
                 // console.log("Scenario 3")
-                BJ.writeMsg("Dealer 21! You Lose!");
-                BJ.changeMoney(0);
+                writeMsg("Dealer 21! You Lose!");
+                changeMoney(0);
             }
         }
         else if(p.cards.length==2 && p.points==21)
         {
                 // console.log("Scenario 4")
-            BJ.writeMsg("Blackjack! You Win!");
-            BJ.changeMoney(2);
+            writeMsg("Blackjack! You Win!");
+            changeMoney(2);
         }
         else if(d.points>21)
         {
                 // console.log("Scenario 5")
-            BJ.writeMsg("Dealer Busts! You Win!");
-            BJ.changeMoney(1);
+            writeMsg("Dealer Busts! You Win!");
+            changeMoney(1);
         }
         else if(p.points>21)
         {
                 // console.log("Scenario 6")
-            BJ.writeMsg("Player Busts! You Lose");
-            BJ.changeMoney(0);
+            writeMsg("Player Busts! You Lose");
+            changeMoney(0);
         }
         else if(d.points>16 && !d.firstCard().facedown)
         {
             if(d.points>p.points)
             {
                 // console.log("Scenario 7")
-                BJ.writeMsg("Dealer Wins! You Lose!");
-                BJ.changeMoney(0);
+                writeMsg("Dealer Wins! You Lose!");
+                changeMoney(0);
             }
             else if(d.points==p.points)
             {
                 // console.log("Scenario 8")
-                BJ.writeMsg("It's a Draw!");
+                writeMsg("It's a Draw!");
             }
             else
             {
                 // console.log("Scenario 9")
-                BJ.writeMsg("You Win!");
-                BJ.changeMoney(1);
+                writeMsg("You Win!");
+                changeMoney(1);
             }
         }
         else if(p.points==21 && !d.firstCard().facedown)
         {
                 // console.log("Scenario 10")
-            BJ.writeMsg("21!");
+            writeMsg("21!");
             result = true;
         }
         else
         {
-            // BJ.writeMsg("No Change");
+            // writeMsg("No Change");
                 // console.log("Scenario 11")
             result = true;
         }
@@ -285,32 +285,32 @@ define(['underscore', 'jquery', 'Player', 'Dealer', 'Deck',
         // Code to run if the deal is over
         if(!result) {
             d.firstCard().removeFaceDown();
-            BJ.drawGameDB();
-            // BJ.discardHands();
+            drawGameDB();
+            // discardHands();
         }
-        BJ.writeScores();
-        // BJ.addMsg("<br>Dealer is showing "+BJ.dealerScore()+"<br>You are showing "+BJ.playerScore());
+        writeScores();
+        // addMsg("<br>Dealer is showing "+dealerScore()+"<br>You are showing "+playerScore());
         return result;
     };
 
-    BJ.playDealer = function(){
+    playDealer = function(){
         GV.dealer().cards[0].removeFaceDown();
-        BJ.cmdStack.addCmd(BJ.makeDealerChoice,10);
+        cmdStack.addCmd(makeDealerChoice,10);
     };
-    BJ.makeDealerChoice = function(){
+    makeDealerChoice = function(){
         if(!GV.deck().cards.length) {
-            BJ.gatherDiscard();
+            gatherDiscard();
         }
-        if(BJ.checkScenario()) {
+        if(checkScenario()) {
             GV.deck().dealTo(GV.dealer())
                 .removeFaceDown()
                 .setStackPosition();
-            BJ.checkCard(GV.dealer(),GV.dealer().lastCard());
-            BJ.cmdStack.addCmd(BJ.makeDealerChoice,200);
+            checkCard(GV.dealer(),GV.dealer().lastCard());
+            cmdStack.addCmd(makeDealerChoice,200);
         }
     };
 
-    BJ.gameMove = function(str) {
+    gameMove = function(str) {
         if(
             !GV.deck().cards.length &&
             !GV.dealer().cards.length &&
@@ -320,37 +320,37 @@ define(['underscore', 'jquery', 'Player', 'Dealer', 'Deck',
             GV.deck().freshDeck().shuffle().shuffle();
         }
         if(!GV.deck().cards.length) {
-            BJ.gatherDiscard();
+            gatherDiscard();
         }
 
-        BJ.writeMsg("&nbsp;");
+        writeMsg("&nbsp;");
 
         switch(str) {
             case "deal":
-                BJ.dealInitial();
+                dealInitial();
                 break;
             case "hit":
-                BJ.hitPlayer();
+                hitPlayer();
                 break;
             case "stay":
-                BJ.stayPlayer();
+                stayPlayer();
                 break;
         }
     }
-    BJ.dealInitial = function(){
+    dealInitial = function(){
         if(GV.dealer().cards.length || GV.player().cards.length) {
             if(GV.dealer().firstCard().facedown) {
-                BJ.writeMsg("Finish the hand first");
+                writeMsg("Finish the hand first");
                 return;
             } else {
-                BJ.cmdStack.addCmd(BJ.discardHands,150);
+                cmdStack.addCmd(discardHands,150);
             }
         }
         if(GV.deck().cards.length || GV.discard().cards.length) {
             if(GV.deck().cards.length<4){
-                BJ.gatherDiscard();
+                gatherDiscard();
             }
-            BJ.cmdStack.addCmd(function(){
+            cmdStack.addCmd(function(){
                 GV.deck().dealTo(GV.player())
                     .removeFaceDown()
                     .setStackPosition();
@@ -371,41 +371,41 @@ define(['underscore', 'jquery', 'Player', 'Dealer', 'Deck',
                     .setStackPosition();
             },100)
             .addCmd(function(){
-                BJ.checkHand(GV.player());
-                BJ.checkHand(GV.dealer());
-                BJ.checkScenario();
+                checkHand(GV.player());
+                checkHand(GV.dealer());
+                checkScenario();
             },0);
         }
     };
-    BJ.hitPlayer = function(){
+    hitPlayer = function(){
         if(!GV.dealer().firstCard().facedown){
-            BJ.writeMsg("Game Over<br>Deal a New Hand");
+            writeMsg("Game Over<br>Deal a New Hand");
             return;
         }
         if(GV.deck().cards.length || GV.discard().cards.length) {
-            BJ.cmdStack.addCmd(function(){
+            cmdStack.addCmd(function(){
                 GV.deck().dealTo(GV.player())
                     .removeFaceDown()
                     .setStackPosition();
-                BJ.checkHand(GV.player());
-                BJ.checkScenario();
+                checkHand(GV.player());
+                checkScenario();
             },100);
         }
     };
-    BJ.stayPlayer = function(){
+    stayPlayer = function(){
         if(!GV.dealer().firstCard().facedown){
-            BJ.writeMsg("Game Over<br>Deal a New Hand");
+            writeMsg("Game Over<br>Deal a New Hand");
             return;
         }
         if(GV.deck().cards.length || GV.discard().cards.length) {
-            BJ.playDealer();
+            playDealer();
         }
     };
 
-    BJ.writeMsg = function(msg) {
+    writeMsg = function(msg) {
         $(".db-message").html(msg);
     };
-    BJ.addMsg = function(msg) {
+    addMsg = function(msg) {
         $(".db-message").append(msg);
     };
 

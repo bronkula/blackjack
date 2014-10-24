@@ -1,18 +1,18 @@
-define(['jquery','underscore','SuitFace'],function(){
+define(['jquery','underscore','GameValues'],
+    function(j,u,GV){
 // CARD CLASS
 
     // Card Constructor
     Card = function(suit,face,stack){
-        this.id = +face + (suit.value * 13);
+        this.id = +face.value + (suit.value * 13);
         this.suit = suit;
         this.face = face;
-        this.view = $(_.template(
-            "<span class='card facedown' style='color:<%=color%>'>"+
-                "<span class='card-icon-top'><%=suit%><br><%=face%></span>"+
-                "<span class='card-icon-bottom'><%=face%><br><%=suit%></span>"+
-            "</span>",
-            {color:this.suit.color,suit:this.suit.icon,face:this.face.icon}
-            )
+        console.log(this)
+        this.view = $(
+            "<span class='card facedown' style='color:"+this.suit.color+"'>"+
+                "<span class='card-icon-top'>"+this.suit.icon+"<br>"+this.face.icon+"</span>"+
+                "<span class='card-icon-bottom'>"+this.face.icon+"<br>"+this.suit.icon+"</span>"+
+            "</span>"
         );
         this.view.data({"card":this});
         this.stack = stack;
@@ -28,10 +28,16 @@ define(['jquery','underscore','SuitFace'],function(){
         if(this.pos.x!=x || this.pos.y!=y) {
             this.pos.x = x;
             this.pos.y = y;
-            this.view.css({left:this.pos.x+"px",top:this.pos.y+"px"});
         }
         return this;
     };
+    Card.prototype.drawPos = function() {
+        this.view.css({
+            left:this.pos.x+"px",
+            top:this.pos.y+"px",
+            "z-index":this.pos.z
+        });
+    }
     Card.prototype.player = function(){
         return this.stack.player;
     }
@@ -42,29 +48,30 @@ define(['jquery','underscore','SuitFace'],function(){
         // console.log(deckposition)
         position = position===undefined ? this.stack.cards.length-1 : position;
         // console.log(this);
-        this.view.css({"z-index":(60 * (this.stack.id)) + this.stack.cards.length});
+        this.pos.z = (60 * (this.stack.id)) + this.stack.cards.length;
         if(this.player().name=="Deck") 
         {
             this.setPos(
-                this.stack.pos.x + Math.floor(position/BJ.stackModulo)*2, 
-                this.stack.pos.y - Math.floor(position/BJ.stackModulo)*2
+                this.stack.pos.x + Math.floor(position/GV.stackModulo)*2, 
+                this.stack.pos.y - Math.floor(position/GV.stackModulo)*2
                 );
-            this.view.css({"z-index":position});
+            this.pos.z = position;
         }
         else if(this.player().name=="Discard")
         {
             this.setPos(
-                this.stack.pos.x + ((this.stack.cards.length-1) * ((BJ.cardWidth/10) + BJ.cardGap)),
+                this.stack.pos.x + ((this.stack.cards.length-1) * ((GV.cardWidth/10) + GV.cardGap)),
                 this.stack.pos.y
                 );
         }
         else
         {
             this.setPos(
-                this.stack.pos.x + ((this.stack.cards.length-1) * ((BJ.cardWidth) + BJ.cardGap)),
+                this.stack.pos.x + ((this.stack.cards.length-1) * ((GV.cardWidth) + GV.cardGap)),
                 this.stack.pos.y
                 );
         }
+        this.drawPos();
         return this;
     };
     Card.prototype.addFaceDown = function(){

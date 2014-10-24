@@ -1,4 +1,4 @@
-define(['Card','SuitFace'],function(){
+define(['Card','SuitFace'],function(Card,SF){
 // STACK CLASS
     //Stack Constructor
     CardStack = function(player,id,x,y){
@@ -26,11 +26,11 @@ define(['Card','SuitFace'],function(){
         return this;
     };
     // Create a new straight deck onto a stack
-    CardStack.prototype.freshDeck = function(suits,faces){
+    CardStack.prototype.freshDeck = function(){
         this.cards = [];
-        for(var s in suits) {
-            for(var f in faces) {
-                this.cards.push(new Card(SuitFace.suits[s],SuitFace.faces[f]),this);
+        for(var s in SF.suits) {
+            for(var f in SF.faces) {
+                this.cards.push(new Card(SF.suits[s],SF.faces[f],this));
             }
         }
         return this;

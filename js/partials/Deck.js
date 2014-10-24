@@ -1,5 +1,5 @@
 define(['Entity'],function(Entity){
-
+console.log(Entity)
     Deck = function(id,name,x,y){
         Entity.apply(this,arguments);
         this.id = id;
@@ -9,8 +9,8 @@ define(['Entity'],function(Entity){
         this.pos.y = y;
     };
 
-    Deck.prototype = Entity.prototype;
-    Deck.prototype.constructor = Deck;
+    // Deck.prototype = Entity.prototype;
+    // Deck.prototype.constructor = Deck;
 
     return Deck;
 });

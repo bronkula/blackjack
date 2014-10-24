@@ -1,5 +1,6 @@
 define(['Entity'],function(Entity){
 
+console.log(Entity)
     Discard = function(id,name,x,y){
         Entity.apply(this,arguments);
         this.id = id;
@@ -9,8 +10,8 @@ define(['Entity'],function(Entity){
         this.pos.y = y;
     };
 
-    Discard.prototype = Entity.prototype;
-    Discard.prototype.constructor = Discard;
+    // Discard.prototype = Entity.prototype;
+    // Discard.prototype.constructor = Discard;
 
     return Discard;
 });

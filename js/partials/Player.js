@@ -1,5 +1,6 @@
 define(['Entity'],function(Entity){
-
+    
+console.log(Entity)
     Player = function(id,name,x,y){
         Entity.apply(this,arguments);
         this.id = id;
@@ -11,8 +12,8 @@ define(['Entity'],function(Entity){
         this.bet = 10;
     };
 
-    Player.prototype = Entity.prototype;
-    Player.prototype.constructor = Player;
+    // Player.prototype = Entity.prototype;
+    // Player.prototype.constructor = Player;
 
     return Player;
 });
