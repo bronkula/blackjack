@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
 
     <link rel="stylesheet" href="blackjack.css">
-    <script src="../../lib/js/jquery-2.1.1.min.js"></script>
-    <script src="../../lib/js/underscore.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/underscore.min.js"></script>
 <style>
 </style>
 
@@ -80,13 +80,5 @@
     </div>
 </body>
 
-
-<script type="text/template" id="Card">
-<span class='card facedown' style='color:<%=color%>'>
-    <span class='card-icon-top'><%=suit%><br><%=face%></span>
-    <span class='card-icon-bottom'><%=face%><br><%=suit%></span>
-</span>
-</script>
-
-<script src="blackjack.js"></script>
+<script data-main="js/game" src="js/require.js"></script>
 </html>

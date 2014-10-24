@@ -77,9 +77,10 @@ body {
     cursor:default;
     vertical-align: middle;
     position:absolute;
-    -webkit-transition:top .35s, left .35s, transform .35s;
-    -moz-transition:top .35s, left .35s, transform .35s;
-    transition:top .35s, left .35s, transform .35s;
+    -webkit-transition:top .3s, left .3s, transform .3s;
+    -moz-transition:top .3s, left .3s, transform .3s;
+    transition:top .3s, left .3s, transform .3s;
+    background-image:none;
 }
 .card-back,.facedown {
     transform:rotateY(180deg);
