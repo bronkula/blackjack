@@ -7,10 +7,10 @@ define(['CardStack'],function(){
         this.pos.x = x;
         this.pos.y = t;
     };
-    Player.prototype.makeStacks = function(num,x,y){
+    Entity.prototype.makeStacks = function(num,x,y){
         this.stacks = [];
         for(var i = 0; i<num; i++) {
-            this.stacks[i] = new Stack(this,i,x,y);
+            this.stacks[i] = new CardStack(this,i,x,y);
         }
     };
 

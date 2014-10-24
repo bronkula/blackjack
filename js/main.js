@@ -12,9 +12,11 @@ require.config({
     'Deck': 'partials/Deck',
     'Discard': 'partials/Discard',
     'Game': 'partials/CardGame',
+    'GameValues': 'partials/GameValues',
     'BlackJack': 'partials/BlackJack',
   }
 });
-require(['BlackJack'],function(){
-    init();
+require(['BlackJack'],function(game){
+    console.log(game);
+    game.init();
 })

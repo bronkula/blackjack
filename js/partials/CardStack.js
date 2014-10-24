@@ -1,4 +1,4 @@
-define(['Card'],function(){
+define(['Card','SuitFace'],function(){
 // STACK CLASS
     //Stack Constructor
     CardStack = function(player,id,x,y){
@@ -30,7 +30,7 @@ define(['Card'],function(){
         this.cards = [];
         for(var s in suits) {
             for(var f in faces) {
-                this.cards.push(new Card(suits[s],faces[f]),this);
+                this.cards.push(new Card(SuitFace.suits[s],SuitFace.faces[f]),this);
             }
         }
         return this;

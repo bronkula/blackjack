@@ -1,13 +1,25 @@
-define(['underscore', 'jquery', 'Player', 'Dealer', 'Deck', 'Discard', 'StackCommand'], function() {
+define(['underscore', 'jquery', 'Player', 'Dealer', 'Deck', 'Discard', 'StackCommand', 'GameValues'], function() {
     var BJ = {};
+
+    
+    BJ.deck = function(){
+        return BJ.stacks[0];
+    }
+    BJ.dealer = function(){
+        return BJ.stacks[1];
+    }
+    BJ.player = function(){
+        return BJ.stacks[2];
+    }
+    BJ.discard = function(){
+        return BJ.stacks[3];
+    }
 
 
 // INITIALIZER
     BJ.init = function(){
 
         BJ.cmdStack = new StackCommand();
-
-        BJ.cardTemplate = _.template($("#Card").html());
 
         $(".view-cards").css({"font-size":BJ.cardFontSize+"px"});
         $(".title-dealer").css({"top":(BJ.rowGap+BJ.cardHeight+BJ.cardGap)+"px"});
@@ -93,9 +105,10 @@ define(['underscore', 'jquery', 'Player', 'Dealer', 'Deck', 'Discard', 'StackCom
         BJ.writeMsg("&nbsp;");
     };
     BJ.startGame = function(){
+        console.log(BJ)
         BJ.resetStacks();
         $(".view-cards").empty();
-        BJ.deck().freshDeck(BJ.suits,BJ.faces).shuffle();
+        BJ.deck().freshDeck().shuffle();
     };
 
 
@@ -414,5 +427,5 @@ define(['underscore', 'jquery', 'Player', 'Dealer', 'Deck', 'Discard', 'StackCom
 
 
 
-    return {init:init};
+    return {init:BJ.init};
 });

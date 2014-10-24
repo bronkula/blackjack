@@ -19,5 +19,5 @@ define({
         { name:"Jack", value:10, points:10, icon:"J" },
         { name:"Queen", value:11, points:10, icon:"Q" },
         { name:"King", value:12, points:10, icon:"K" },
-    ]}
+    ]
 });
