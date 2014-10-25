@@ -1,4 +1,4 @@
-define(['GameValues'],function(GV){
+define(['GameValues','BlackJackMechanics'],function(GV,BM){
 
     GM = {};
 
@@ -40,7 +40,7 @@ define(['GameValues'],function(GV){
     GM.setStackPosition = function(card,position) {
         position = position===undefined ? card.stack.cards.length-1 : position;
 
-        card.pos.z = (60 * (card.stack.id)) + card.stack.cards.length;
+        card.pos.z = (60 * (card.entity().id)) + card.stack.cards.length;
         if(card.entity().name=="Deck") 
         {
             card.setPos(
@@ -66,6 +66,11 @@ define(['GameValues'],function(GV){
         card.drawPos();
         return card;
     };
+
+
+    for(var i in BM) {
+        GM[i] = BM[i];
+    }
 
     return GM;
 });
