@@ -18,6 +18,13 @@ define(['GameValues','GameMechanics'],function(GV,GM){
         GM.player().money = 100;
         GM.player().bet = 10;
     };
+    MM.resetBet = function() {
+        GM.player().bet = 10;
+    };
+
+    MM.doubleDown = function(){
+        GM.player().bet *= 2;
+    }
     MM.drawMoney = function(){
         $(".db-money .db-value").html(GM.player().money);
         $(".db-bet .db-value").html(GM.player().bet);

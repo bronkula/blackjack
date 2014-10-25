@@ -82,6 +82,7 @@ define(['GameMechanics','MoneyMechanics'],
         // Code to run if the deal is over
         if(!result) {
             d.firstCard().removeFaceDown();
+            MM.resetBet();
             MM.drawMoney();
             // discardHands();
         }
@@ -132,8 +133,14 @@ define(['GameMechanics','MoneyMechanics'],
             case "hit":
                 BM.hitPlayer();
                 break;
+            case "double":
+                BM.doublePlayer();
+                break;
             case "stay":
                 BM.stayPlayer();
+                break;
+            case "split":
+                BM.splitPlayer();
                 break;
         }
     }
@@ -191,6 +198,23 @@ define(['GameMechanics','MoneyMechanics'],
                 BM.checkHand(GM.player(0));
                 BM.checkScenario();
             },100);
+        }
+    };
+    BM.doublePlayer = function(){
+        if(GM.player(0).cards.length==2) {
+            MM.doubleDown();
+            GV.cmdStack.addCmd(function(){
+                GM.setStackPosition(
+                    GM.deck(0).dealTo(GM.player(0)).removeFaceDown()
+                    );
+                BM.checkHand(GM.player(0));
+                BM.checkScenario();
+                
+                BM.stayPlayer();
+            },100)
+        } else {
+            GM.writeMsg("Can't Double Down Now");
+            return;
         }
     };
     BM.stayPlayer = function(){

@@ -1,11 +1,11 @@
 define(['underscore', 'jquery',
     'GameValues', 'GameMechanics', 'BlackJackMechanics', 'MoneyMechanics',
     'Deck','Dealer','Player','Discard'],
-    function(underscore,jquery,
+    function(u,j,
         GV,GM,BM,MM,
         Deck,Dealer,Player,Discard) {
 
-// INITIALIZER
+// Initialize the document entities and start game
     init = function(){
 
         $(".game-version").html("v"+GV.gameVersion);
@@ -15,6 +15,8 @@ define(['underscore', 'jquery',
         $(".title-player").css({"top":(((GV.rowGap+GV.cardHeight)*2)+GV.cardGap)+"px"});
 
         $(".js-newgame").on("click",startGame);
+
+
 
         $(".js-dealinitial").on("click",function(){BM.gameMove('deal');});
         $(".js-hitplayer").on("click",function(){BM.gameMove('hit');});
@@ -29,9 +31,9 @@ define(['underscore', 'jquery',
             console.log($(this).data("card"));
         })
         .on("keypress",function(e){
-            if(e.keyCode==97) dealInitial();
-            else if(e.keyCode==115) hitPlayer();
-            else if(e.keyCode==100) stayPlayer();
+            if(e.keyCode==97) BM.dealInitial();
+            else if(e.keyCode==115) BM.hitPlayer();
+            else if(e.keyCode==100) BM.stayPlayer();
         })
         ;
 
@@ -41,7 +43,7 @@ define(['underscore', 'jquery',
 
 
 
-// BASIC GAME FUNCTIONS
+// Start up data bases and create deck
     startGame = function(){
         var newentities = [
             (new Deck(0,"Deck",GV.deckLeft,GV.deckTop)).makeStacks(1),
