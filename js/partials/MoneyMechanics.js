@@ -15,7 +15,6 @@ define(['GameValues','GameMechanics'],function(GV,GM){
     };
 
     MM.makeMoney = function(){
-        console.log(GV)
         GM.player().money = 100;
         GM.player().bet = 10;
     };

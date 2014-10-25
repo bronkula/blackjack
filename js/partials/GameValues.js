@@ -38,6 +38,7 @@ define(['jquery','StackCommand'],function(j,SC){
 
 
 
+    // StackCommand object for use by anyone
     GV.cmdStack = new SC();
 
 

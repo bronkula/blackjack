@@ -120,7 +120,7 @@ define(['GameMechanics','MoneyMechanics'],
             GM.deck(0).freshDeck().shuffle().shuffle();
         }
         if(!GM.deck(0).cards.length) {
-            gatherDiscard();
+            BM.gatherDiscard();
         }
 
         GM.writeMsg("&nbsp;");
@@ -143,12 +143,12 @@ define(['GameMechanics','MoneyMechanics'],
                 GM.writeMsg("Finish the hand first");
                 return;
             } else {
-                GV.cmdStack.addCmd(discardHands,150);
+                GV.cmdStack.addCmd(BM.discardHands,150);
             }
         }
         if(GM.deck(0).cards.length || GM.discard(0).cards.length) {
             if(GM.deck(0).cards.length<4){
-                gatherDiscard();
+                BM.gatherDiscard();
             }
             GV.cmdStack.addCmd(function(){
                 GM.setStackPosition(
@@ -172,8 +172,8 @@ define(['GameMechanics','MoneyMechanics'],
                     );
             },100)
             .addCmd(function(){
-                checkHand(GM.player(0));
-                checkHand(GM.dealer(0));
+                BM.checkHand(GM.player(0));
+                BM.checkHand(GM.dealer(0));
                 BM.checkScenario();
             },0);
         }
@@ -188,7 +188,7 @@ define(['GameMechanics','MoneyMechanics'],
                 GM.setStackPosition(
                     GM.deck(0).dealTo(GM.player(0)).removeFaceDown()
                     );
-                checkHand(GM.player(0));
+                BM.checkHand(GM.player(0));
                 BM.checkScenario();
             },100);
         }
@@ -199,9 +199,95 @@ define(['GameMechanics','MoneyMechanics'],
             return;
         }
         if(GM.deck(0).cards.length || GM.discard(0).cards.length) {
-            playDealer();
+            BM.playDealer();
         }
     };
+
+
+
+
+// GAME FUNCTIONS
+    BM.checkHand = function(hand){
+        hand.points = 0;
+        hand.soft = false;
+        for(var i=0,l=hand.cards.length; i<l; i++) {
+            BM.checkCard(hand,hand.cards[i]);
+        }
+    };
+    BM.checkCard = function(hand,card){
+        // calculate aces
+        if(card.face.value==0) {
+            if(hand.points+11<=21) {
+                // console.log("made it soft")
+                hand.points += 11;
+                hand.soft = true;
+            } else if(hand.soft && hand.points+1<21) {
+                // console.log("unsoftened")
+                hand.points += 1;
+                hand.soft = true;
+            } else {
+                // console.log("hard")
+                hand.points++;
+                hand.soft = false;
+            }
+        } 
+        // add other cards
+        else {
+            hand.points += card.face.points;
+        }
+
+        if(hand.soft && hand.points>21) {
+            hand.points -= 10;
+            hand.soft = false;
+        }
+
+    };
+
+
+
+    // Dealer Mechanics
+    BM.playDealer = function(){
+        GM.dealer(0).cards[0].removeFaceDown();
+        GV.cmdStack.addCmd(BM.makeDealerChoice,10);
+    };
+    BM.makeDealerChoice = function(){
+        if(!GM.deck(0).cards.length) {
+            BM.gatherDiscard();
+        }
+        if(BM.checkScenario()) {
+            GM.setStackPosition(
+                GM.deck(0).dealTo(GM.dealer(0)).removeFaceDown()
+                );
+            BM.checkCard(GM.dealer(0),GM.dealer(0).lastCard());
+            GV.cmdStack.addCmd(BM.makeDealerChoice,200);
+        }
+    };
+
+
+
+
+    // Gather Mechanics
+    BM.gatherCards = function(){
+        GM.dealer(0).gatherCards(GM.deck(0));
+        GM.player(0).gatherCards(GM.deck(0));
+        GM.discard(0).gatherCards(GM.deck(0));
+        GM.deck(0).drawStack();
+        // $(".view-cards").empty();
+    };
+    BM.discardHands = function(){
+        GM.dealer(0).discardCards(GM.discard(0));
+        GM.player(0).discardCards(GM.discard(0));
+        if(!GM.deck(0).cards.length) BM.gatherDiscard();
+        // $(".view-cards").empty();
+    };
+    BM.gatherDiscard = function(){
+        // GV.cmdStack.addCmd(function(){discard().gatherCards();},0)
+        // .addCmd(function(){deck().shuffle()},100).addCmd(function(){deck().shuffle()},100)
+        GM.discard(0).gatherCards(GM.deck(0));
+        GM.deck(0).shuffle().shuffle();
+        GV.cmdStack.pause(300);
+    }
+
 
 
     return BM;
