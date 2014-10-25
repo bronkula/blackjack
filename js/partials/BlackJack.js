@@ -155,9 +155,9 @@ define(['underscore', 'jquery', 'StackCommand',
     gatherDiscard = function(){
         // cmdStack.addCmd(function(){discard().gatherCards();},0)
         // .addCmd(function(){deck().shuffle()},100).addCmd(function(){deck().shuffle()},100)
-        GM.discard(0).gatherCards();
+        GM.discard(0).gatherCards(GM.deck(0));
         GM.deck(0).shuffle().shuffle();
-        cmdStack.delay(300);
+        cmdStack.pause(300);
     }
     dealerScore = function(){
         return GM.dealer(0).firstCard().facedown ? GM.dealer(0).cards[1].face.points : GM.dealer(0).points;
