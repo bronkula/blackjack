@@ -15,9 +15,9 @@ require.config({
     'GameValues': 'partials/GameValues',
     'GameMechanics': 'partials/GameMechanics',
     'GameEntities': 'partials/GameEntities',
-    'ViewMechanics': 'partials/ViewMechanics',
 
     'BlackJackMechanics': 'partials/BlackJackMechanics',
+    'MoneyMechanics': 'partials/MoneyMechanics',
 
     'BlackJack': 'partials/BlackJack'
   }

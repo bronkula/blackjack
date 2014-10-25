@@ -1,4 +1,4 @@
-define(['jquery'],function(){
+define(['jquery','StackCommand'],function(j,SC){
 // DATABASE
     // Random important heights lengths widths shits
     GV = {};
@@ -32,7 +32,13 @@ define(['jquery'],function(){
     GV.playerMoney = 100;
     GV.playerBet = 10;
 
+
+
     GV.entities = [];
+
+
+
+    GV.cmdStack = new SC();
 
 
 

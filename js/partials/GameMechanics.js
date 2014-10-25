@@ -1,4 +1,4 @@
-define(['GameValues','BlackJackMechanics'],function(GV,BM){
+define(['GameValues'],function(GV){
 
     GM = {};
 
@@ -7,6 +7,14 @@ define(['GameValues','BlackJackMechanics'],function(GV,BM){
         while(arr.length) {
             GV.entities.push(arr.shift());
         }
+    };
+
+
+    GM.writeMsg = function(msg) {
+        $(".db-message").html(msg);
+    };
+    GM.addMsg = function(msg) {
+        $(".db-message").append(msg);
     };
 
 
@@ -66,11 +74,6 @@ define(['GameValues','BlackJackMechanics'],function(GV,BM){
         card.drawPos();
         return card;
     };
-
-
-    for(var i in BM) {
-        GM[i] = BM[i];
-    }
 
     return GM;
 });
