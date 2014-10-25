@@ -49,6 +49,7 @@ define(function(){
         var self = this;
         this.currentcommand = this.getCmd();
         this.timer = setTimeout(function(){
+            if(!self.currentcommand.cb) return;
             self.currentcommand.cb();
             self.currentcommand = false;
             self.runCmd();

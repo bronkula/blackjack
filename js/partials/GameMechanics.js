@@ -24,6 +24,7 @@ define(['GameValues'],function(GV){
         else return GV.entities[e].stacks[c];
     };
 
+
     // Each of these can be passed a number to return a stack of theirs, instead of themselves.
     GM.deck = function(){
         return GM.getEntity(0,arguments[0]);
