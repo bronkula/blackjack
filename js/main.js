@@ -11,10 +11,9 @@ require.config({
     'Dealer': 'partials/Dealer',
     'Deck': 'partials/Deck',
     'Discard': 'partials/Discard',
-    'Game': 'partials/CardGame',
+
     'GameValues': 'partials/GameValues',
     'GameMechanics': 'partials/GameMechanics',
-    'GameEntities': 'partials/GameEntities',
 
     'BlackJackMechanics': 'partials/BlackJackMechanics',
     'MoneyMechanics': 'partials/MoneyMechanics',

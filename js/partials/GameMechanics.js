@@ -10,6 +10,7 @@ define(['GameValues'],function(GV){
     };
 
 
+
     GM.writeMsg = function(msg) {
         $(".db-message").html(msg);
     };
@@ -23,6 +24,7 @@ define(['GameValues'],function(GV){
         if(c===undefined) return GV.entities[e];
         else return GV.entities[e].stacks[c];
     };
+
 
 
     // Each of these can be passed a number to return a stack of theirs, instead of themselves.
@@ -75,6 +77,9 @@ define(['GameValues'],function(GV){
         card.drawPos();
         return card;
     };
+
+
+
 
     return GM;
 });

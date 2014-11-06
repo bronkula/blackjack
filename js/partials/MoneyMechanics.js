@@ -4,30 +4,31 @@ define(['GameValues','GameMechanics'],function(GV,GM){
 
     MM.changeMoney = function(type) {
         if(type==0){
-            GM.player().money -= GM.player().bet;
+            GM.player().money -= GM.player().currentbet;
         }
         if(type==1){
-            GM.player().money += GM.player().bet;
+            GM.player().money += GM.player().currentbet;
         }
         if(type==2){
-            GM.player().money += Math.ceil(GM.player().bet * 1.5);
+            GM.player().money += Math.ceil(GM.player().currentbet * 1.5);
         }
     };
 
     MM.makeMoney = function(){
         GM.player().money = 100;
-        GM.player().bet = 10;
+        GM.player().currentbet = 10;
+        GM.player().basebet = 10;
     };
     MM.resetBet = function() {
-        GM.player().bet = 10;
+        GM.player().currentbet = GM.player().basebet;
     };
 
     MM.doubleDown = function(){
-        GM.player().bet *= 2;
+        GM.player().currentbet *= 2;
     }
     MM.drawMoney = function(){
         $(".db-money .db-value").html(GM.player().money);
-        $(".db-bet .db-value").html(GM.player().bet);
+        $(".db-bet .db-value").html(GM.player().currentbet);
     };
 
     return MM;
